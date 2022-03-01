@@ -6,24 +6,24 @@
 * @date 22.03.01
 */
 
+require_once "./conf/Database.php";
 
 $startTime = time();
 
-$conn = new mysqli('127.0.0.1','root','danceintherain','imweb');
-$autoresult = $conn->autocommit(FALSE);
+$conn->autocommit(FALSE);
 
 try {
     $twoYearsAgo = date("Y-m-d", strtotime("-2 years"));
     $copyqry = "INSERT INTO imweb.unconnected_member(idx, email, name, join_date, last_login_time)
                     SELECT idx,email,name,join_date,last_login_time FROM member WHERE last_login_time < '$twoYearsAgo'";
     $result = $conn->query($copyqry);
-    if ( !$result ) {
+    if ( !$result ){
         throw new Exception($conn->error);
     }
 
     $delqry = "DELETE FROM imweb.member WHERE idx IN(SELECT idx FROM imweb.unconnected_member)";
     $result = $conn->query($delqry);
-    if ( !$result ) {
+    if ( !$result ){
         throw new Exception($conn->error);
     }
 

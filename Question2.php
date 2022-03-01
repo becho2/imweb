@@ -6,6 +6,8 @@
 * @date 22.02.26
 */
 
+require_once "./conf/Database.php";
+
 // 반복시키고 싶은 간격(초 단위)을 PERIOD에 설정한다
 define('PERIOD', 1);
 $repeat = ceil(60/PERIOD);
@@ -62,7 +64,7 @@ function batchService(){
 }
 
 function insertLog($msg){
-    $conn = new mysqli('127.0.0.1','root','danceintherain','imweb');
+    global $conn;
     $msg = str_replace("'","\'",$msg);
     $qry = "INSERT INTO imweb.batch_log(description, created)
                 VALUES ('$msg', NOW())";
